@@ -493,7 +493,7 @@
   .glass-card {
     background: rgba(255, 255, 255, 0.55);
     backdrop-filter: blur(14px);
-    border-radius: 20px;
+    border-radius: 16px;
     padding: 24px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -616,15 +616,18 @@
     width: 100%;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    border-radius: 12px;
-    background: white;
+    border-radius: 16px;
+    background: #ffffff;
     margin-bottom: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .product-card img {
+  .image-frame img,
+  .product-card img,
+  .product-preview img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -729,8 +732,16 @@
   }
 
   .preview-frame {
-    max-width: 200px;
+    width: 200px;
+    aspect-ratio: 1 / 1;
+    max-width: 100%;
     margin: 0 auto 12px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .product-preview img {
