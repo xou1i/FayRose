@@ -1,5 +1,13 @@
 <script>
   import { onMount } from 'svelte';
+  import flower1 from './assets/bouquet-bright-fresh-flowers-ribbon.jpg';
+  import flower2 from './assets/side-view-dark-purple-color-iris-flower-isolated-white-background.jpg';
+  import gift1 from './assets/boxing-day-celebration-with-gift.jpg';
+  import gift2 from './assets/fluffy-toy-texture-close-up.jpg';
+  import wrapping1 from './assets/flower-shop-collection.jpg';
+  import wrapping2 from './assets/pink-flower-bouquet-wrapped-with-brown-paper-against-white-background.jpg';
+  import card1 from './assets/flat-lay-beautiful-composition-mother-s-day-event.jpg';
+  import card2 from './assets/flowers-greeting-card-concept.jpg';
 
   let token = '';
   let user = null;
@@ -22,13 +30,13 @@
         id: 1,
         name: 'Rose Bouquet',
         price: 25000,
-        image: 'https://via.placeholder.com/300x300.png?text=Rose+Bouquet'
+        image: flower1
       },
       {
         id: 2,
         name: 'Tulip Bouquet',
         price: 22000,
-        image: 'https://via.placeholder.com/300x300.png?text=Tulip+Bouquet'
+        image: flower2
       }
     ],
     Gifts: [
@@ -36,13 +44,13 @@
         id: 3,
         name: 'Gift Box',
         price: 15000,
-        image: 'https://via.placeholder.com/300x300.png?text=Gift+Box'
+        image: gift1
       },
       {
         id: 4,
         name: 'Teddy Bear',
         price: 18000,
-        image: 'https://via.placeholder.com/300x300.png?text=Teddy+Bear'
+        image: gift2
       }
     ],
     Wrapping: [
@@ -50,13 +58,13 @@
         id: 5,
         name: 'Luxury Wrapping',
         price: 5000,
-        image: 'https://via.placeholder.com/300x300.png?text=Luxury+Wrapping'
+        image: wrapping1
       },
       {
         id: 6,
         name: 'Classic Wrapping',
         price: 3000,
-        image: 'https://via.placeholder.com/300x300.png?text=Classic+Wrapping'
+        image: wrapping2
       }
     ],
     Cards: [
@@ -64,13 +72,13 @@
         id: 7,
         name: 'Message Card',
         price: 2000,
-        image: 'https://via.placeholder.com/300x300.png?text=Message+Card'
+        image: card1
       },
       {
         id: 8,
         name: 'Love Card',
         price: 2500,
-        image: 'https://via.placeholder.com/300x300.png?text=Love+Card'
+        image: card2
       }
     ]
   };
@@ -305,7 +313,9 @@
       <div class="products-grid">
         {#each currentProducts as product}
           <div class="glass-card product-card">
-            <img src={product.image} alt={product.name} />
+            <div class="image-frame">
+              <img src={product.image} alt={product.name} />
+            </div>
             <h3>{product.name}</h3>
             <p class="price">{product.price.toLocaleString()} IQD</p>
             <button class="customize-btn" on:click={() => customizeProduct(product)}>
@@ -325,7 +335,9 @@
           <h2>Customize Your Order</h2>
           
           <div class="product-preview">
-            <img src={selectedProduct.image} alt={selectedProduct.name} />
+            <div class="image-frame preview-frame">
+              <img src={selectedProduct.image} alt={selectedProduct.name} />
+            </div>
             <h3>{selectedProduct.name}</h3>
             <p class="base-price">Base Price: {selectedProduct.price.toLocaleString()} IQD</p>
           </div>
@@ -600,13 +612,23 @@
     transform: translateY(-4px);
   }
 
+  .image-frame {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 12px;
+    background: white;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .product-card img {
     width: 100%;
-    height: 140px;
-    object-fit: contain;
-    background: white;
-    border-radius: 12px;
-    margin-bottom: 12px;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .product-card h3 {
@@ -706,14 +728,16 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
+  .preview-frame {
+    max-width: 200px;
+    margin: 0 auto 12px;
+  }
+
   .product-preview img {
     width: 100%;
-    max-width: 200px;
-    height: 200px;
-    object-fit: contain;
-    background: white;
-    border-radius: 12px;
-    margin-bottom: 12px;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .product-preview h3 {
