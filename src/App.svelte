@@ -1,4 +1,6 @@
 <script>
+  import { onMount } from 'svelte';
+
   let token = '';
   let user = null;
   let currentCategory = 'Flowers';
@@ -83,10 +85,10 @@
   $: canPay = token && user && quantity > 0 && !loadingPay && selectedProduct;
 
   function loadStoredData() {
-    if (typeof my !== 'undefined' && my.getStorageSync) {
+    if (window.my && typeof window.my.getStorageSync === 'function') {
       try {
-        const storedToken = my.getStorageSync({ key: 'fayrose_token' });
-        const storedUser = my.getStorageSync({ key: 'fayrose_user' });
+        const storedToken = window.my.getStorageSync({ key: 'fayrose_token' });
+        const storedUser = window.my.getStorageSync({ key: 'fayrose_user' });
         if (storedToken && storedToken.data) {
           token = storedToken.data;
         }
@@ -101,8 +103,8 @@
 
   function saveToken(newToken) {
     token = newToken;
-    if (typeof my !== 'undefined' && my.setStorageSync) {
-      my.setStorageSync({
+    if (window.my && typeof window.my.setStorageSync === 'function') {
+      window.my.setStorageSync({
         key: 'fayrose_token',
         data: newToken
       });
@@ -111,8 +113,8 @@
 
   function saveUser(userData) {
     user = userData;
-    if (typeof my !== 'undefined' && my.setStorageSync) {
-      my.setStorageSync({
+    if (window.my && typeof window.my.setStorageSync === 'function') {
+      window.my.setStorageSync({
         key: 'fayrose_user',
         data: JSON.stringify(userData)
       });
@@ -124,13 +126,13 @@
     loadingAuth = true;
     errorMessage = '';
 
-    if (typeof my === 'undefined' || !my.getAuthCode) {
+    if (!window.my || typeof window.my.getAuthCode !== 'function') {
       errorMessage = 'SuperQi environment not detected';
       loadingAuth = false;
       return;
     }
 
-    my.getAuthCode({
+    window.my.getAuthCode({
       scopes: ['auth_base', 'USER_ID'],
       success: (res) => {
         const authCode = res.authCode;
@@ -213,20 +215,20 @@
       .then(response => response.json())
       .then(data => {
         if (data.url) {
-          if (typeof my !== 'undefined' && my.tradePay) {
-            my.tradePay({
+          if (window.my && typeof window.my.tradePay === 'function') {
+            window.my.tradePay({
               paymentUrl: data.url,
               success: () => {
-                if (typeof my !== 'undefined' && my.alert) {
-                  my.alert({ content: 'Payment successful' });
+                if (window.my && typeof window.my.alert === 'function') {
+                  window.my.alert({ content: 'Payment successful' });
                 }
                 loadingPay = false;
                 showCustomize = false;
                 selectedProduct = null;
               },
               fail: () => {
-                if (typeof my !== 'undefined' && my.alert) {
-                  my.alert({ content: 'Payment failed' });
+                if (window.my && typeof window.my.alert === 'function') {
+                  window.my.alert({ content: 'Payment failed' });
                 }
                 loadingPay = false;
               }
@@ -251,10 +253,14 @@
     selectedProduct = null;
   }
 
-  loadStoredData();
+  onMount(() => {
+    loadStoredData();
+  });
 </script>
 
-<svelte:window onload={loadStoredData} />
+<svelte:head>
+  <script src="https://cdn.marmot-cloud.com/npm/hylid-bridge/2.10.0/index.js"></script>
+</svelte:head>
 
 <div class="app">
   <nav class="navbar">
